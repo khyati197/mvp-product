@@ -1,33 +1,37 @@
 import React, { useState } from "react";
 import { Button, Box, Modal, TextField, Grid } from "@mui/material";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-};
-
-const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
-  const [formData, setFormData] = useState({
-    Title: "",
-    Description: "",
-    Date: "",
-  });
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+const EditTodo = ({ rowData, selectedTodo, setIsEditing }) => {
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    p: 4,
   };
+
+  const [Title, setEditedTitle] = useState(selectedTodo.Title);
+  const [Description, setEditedDescription] = useState(
+    selectedTodo.Description
+  );
+  const [Date, setEditedDate] = useState(selectedTodo.Date);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    rows.push(formData);
-    newTodoItem(rows);
-    setOpen(false);
+    const todo = {
+      Title,
+      Description,
+      Date,
+    };
+    for (let i = 0; i < rowData.length; i++) {
+      if (rowData[i].Title === selectedTodo.Title) {
+        rowData[i] = todo;
+      }
+    }
+    setIsEditing(false);
   };
 
   return (
@@ -46,8 +50,8 @@ const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
                   label="Title"
                   variant="outlined"
                   fullWidth
-                  value={formData.Title}
-                  onChange={handleChange}
+                  value={Title}
+                  onChange={(e) => setEditedTitle(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -56,8 +60,8 @@ const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
                   label="Description"
                   variant="outlined"
                   fullWidth
-                  value={formData.Description}
-                  onChange={handleChange}
+                  value={Description}
+                  onChange={(e) => setEditedDescription(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -66,8 +70,8 @@ const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
                   type="date"
                   variant="outlined"
                   fullWidth
-                  value={formData.Date}
-                  onChange={handleChange}
+                  value={Date}
+                  onChange={(e) => setEditedDate(e.target.value)}
                 />
               </Grid>
             </Grid>
@@ -86,4 +90,4 @@ const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
   );
 };
 
-export default AddNewTodo;
+export default EditTodo;

@@ -5,9 +5,9 @@ const columns = [
 ];
 
 const rows = [
-  { Title: 1, Description: "John", Date: 25 },
-  { Title: 2, Description: "Alice", Date: 30 },
-  { Title: 3, Description: "Bob", Date: 28 },
+  { Title: "today", Description: "John", Date: "2023-08-11" },
+  { Title: "next day", Description: "Alice", Date: "2023-08-12" },
+  { Title: "first day", Description: "Bob", Date: "2023-08-19" },
 ];
 
 const dataGroup = {
