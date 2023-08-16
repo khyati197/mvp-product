@@ -12,22 +12,25 @@ const EditTodo = ({ rowData, selectedTodo, setIsEditing }) => {
     boxShadow: 24,
     p: 4,
   };
+  console.log(selectedTodo, "selectedTodo");
+  const id = selectedTodo.id;
 
   const [Title, setEditedTitle] = useState(selectedTodo.Title);
   const [Description, setEditedDescription] = useState(
     selectedTodo.Description
   );
-  const [Date, setEditedDate] = useState(selectedTodo.Date);
+  const [dueDate, setEditedDate] = useState(selectedTodo.dueDate);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const todo = {
+      id,
       Title,
       Description,
-      Date,
+      dueDate,
     };
     for (let i = 0; i < rowData.length; i++) {
-      if (rowData[i].Title === selectedTodo.Title) {
+      if (rowData[i].id === selectedTodo.id) {
         rowData[i] = todo;
       }
     }
@@ -66,11 +69,11 @@ const EditTodo = ({ rowData, selectedTodo, setIsEditing }) => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  name="Date"
+                  name="dueDate"
                   type="date"
                   variant="outlined"
                   fullWidth
-                  value={Date}
+                  value={dueDate}
                   onChange={(e) => setEditedDate(e.target.value)}
                 />
               </Grid>

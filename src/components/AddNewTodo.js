@@ -14,9 +14,10 @@ const style = {
 
 const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
   const [formData, setFormData] = useState({
+    id: rows.length + 1,
     Title: "",
     Description: "",
-    Date: "",
+    dueDate: "",
   });
 
   const handleChange = (event) => {
@@ -26,8 +27,9 @@ const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     rows.push(formData);
-    newTodoItem(rows);
     setOpen(false);
+    newTodoItem(rows);
+    localStorage.setItem("dataList", JSON.stringify(rows));
   };
 
   return (
@@ -62,11 +64,11 @@ const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  name="Date"
+                  name="dueDate"
                   type="date"
                   variant="outlined"
                   fullWidth
-                  value={formData.Date}
+                  value={formData.dueDate}
                   onChange={handleChange}
                 />
               </Grid>

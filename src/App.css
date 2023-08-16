@@ -36,3 +36,62 @@
     transform: rotate(360deg);
   }
 }
+.selected-row {
+  text-decoration: line-through;
+  background-color: rgba(25, 118, 210, 0.418);
+}
+
+.app {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.color-picker {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.color-option {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #333;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.color-option.selected {
+  border-width: 4px;
+}
+
+.add-note-btn {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.sticky-notes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.sticky-note {
+  width: 150px;
+  height: 150px;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  margin-top: 0.5rem;
+}

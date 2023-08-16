@@ -7,18 +7,37 @@ import {
   TableHead,
   TableRow,
   Paper,
+  IconButton,
   TableSortLabel,
+  Checkbox,
+  TextField,
 } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
 
 const TodoList = ({ rowData, columns, handelEdit, handleDelete }) => {
-  const [rows, setRows] = useState(rowData);
-  const [draggedIndex, setDraggedIndex] = useState(null);
+  const [selectedRows, setSelectedRows] = useState([]);
   const [sortConfig, setSortConfig] = useState({
-    key: "title",
+    key: "",
     direction: "asc",
   });
+  const [searchQuery, setSearchQuery] = useState(""); // Step 1
+
+  const sortedRows = [...rowData].sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === "asc" ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === "asc" ? 1 : -1;
+    }
+    return 0;
+  });
+
+  const filteredRows = sortedRows.filter(
+    (row) =>
+      row.Title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.Description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleSort = (key) => {
     let direction = "asc";
@@ -26,79 +45,77 @@ const TodoList = ({ rowData, columns, handelEdit, handleDelete }) => {
       direction = "desc";
     }
     setSortConfig({ key, direction });
+  };
 
-    const sortedRows = [...rows].sort((a, b) => {
-      if (a[key] < b[key]) return direction === "asc" ? -1 : 1;
-      if (a[key] > b[key]) return direction === "asc" ? 1 : -1;
-      return 0;
+  const handleCheckboxChange = (rowId) => {
+    setSelectedRows((prevSelectedRows) => {
+      const updatedSelectedRows = prevSelectedRows.includes(rowId)
+        ? prevSelectedRows.filter((id) => id !== rowId)
+        : [...prevSelectedRows, rowId];
+      return updatedSelectedRows;
     });
-
-    setRows(sortedRows);
-  };
-
-  const handleDragStart = (event, index) => {
-    event.dataTransfer.setData("text/plain", index);
-    setDraggedIndex(index);
-  };
-
-  const handleDragOver = (event, index) => {
-    event.preventDefault();
-    if (draggedIndex === null || draggedIndex === index) {
-      return;
-    }
-
-    const updatedRows = [...rows];
-    const [draggedRow] = updatedRows.splice(draggedIndex, 1);
-    updatedRows.splice(index, 0, draggedRow);
-    setRows(updatedRows);
-    setDraggedIndex(index);
-  };
-
-  const handleDragEnd = () => {
-    setDraggedIndex(null);
   };
 
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            {columns.map((column) => (
-              <TableCell key={column.field}>
-                {" "}
-                <TableSortLabel
-                  active={sortConfig.key === column.field}
-                  direction={sortConfig.direction}
-                  onClick={() => handleSort(column.field)}
-                >
-                  {column.field}
-                </TableSortLabel>
+    <>
+      <TextField
+        label="Search"
+        variant="outlined"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="my-4 w-100 "
+      />
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell padding="checkbox">
+                <Checkbox />
               </TableCell>
-            ))}
-            <TableCell>Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row, index) => (
-            <TableRow
-              key={row.Title}
-              draggable
-              onDragStart={(event) => handleDragStart(event, index)}
-              onDragOver={(event) => handleDragOver(event, index)}
-              onDragEnd={handleDragEnd}
-            >
-              <TableCell>{row.Title}</TableCell>
-              <TableCell>{row.Description}</TableCell>
-              <TableCell>{row.Date}</TableCell>
-              <TableCell>
-                <DeleteOutlineIcon onClick={() => handleDelete(row.Title)} />
-                <EditIcon onClick={() => handelEdit(row.Title)} />
-              </TableCell>
+              {columns.map((column) => (
+                <TableCell   key={column.field}>
+                  <TableSortLabel
+                    active={sortConfig.key === column.field}
+                    direction={sortConfig.direction}
+                    onClick={() => handleSort(column.field)}
+                  >
+                    {column.field}
+                  </TableSortLabel>
+                </TableCell>
+              ))}
+              <TableCell>Action</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {filteredRows.map((row) => (
+              <TableRow
+                key={row.Title}
+                className={selectedRows.includes(row.id) ? "selected-row" : ""}
+              >
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    color="primary"
+                    checked={selectedRows.includes(row.id)}
+                    onChange={() => handleCheckboxChange(row.id)}
+                  />
+                </TableCell>
+                <TableCell>{row.Title}</TableCell>
+                <TableCell>{row.Description}</TableCell>
+                <TableCell>{row.dueDate}</TableCell>
+                <TableCell className="d-flex">
+                  <IconButton onClick={() => handleDelete(row.id)}>
+                    <DeleteOutlineIcon />
+                  </IconButton>
+                  <IconButton onClick={() => handelEdit(row.id)}>
+                    <EditIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 
