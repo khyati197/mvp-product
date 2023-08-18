@@ -1,0 +1,11 @@
+.sticky-note {
+  background-color: #ffd700;
+  border: 1px solid #ccc;
+  @media screen and (max-width: 567px) {
+    width: 100%;
+  }
+}
+
+.notestextarea:focus-visible {
+  outline: none !important;
+}

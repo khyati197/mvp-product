@@ -1,16 +1,18 @@
 import React from "react";
-import { Button } from "@mui/material";
-
+import { IconButton, Typography } from "@mui/material";
+import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
 const AddTodoBtn = ({ open }) => {
   return (
-    <Button
-      onClick={() => open(true)}
-      variant="contained"
-      color="primary"
-      className="mt-4 me-3"
-    >
-      Add NewTodo
-    </Button>
+    <>
+      <div className="d-flex align-items-center">
+        <Typography variant="h5" component="h5" color="primary">
+          TODOS
+        </Typography>
+        <IconButton onClick={() => open(true)}>
+          <AddCircleSharpIcon sx={{ fontSize: "40px" }} color="primary" />
+        </IconButton>
+      </div>
+    </>
   );
 };
 

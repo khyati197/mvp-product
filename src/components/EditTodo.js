@@ -2,19 +2,7 @@ import React, { useState } from "react";
 import { Button, Box, Modal, TextField, Grid } from "@mui/material";
 
 const EditTodo = ({ rowData, selectedTodo, setIsEditing }) => {
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    p: 4,
-  };
-  console.log(selectedTodo, "selectedTodo");
   const id = selectedTodo.id;
-
   const [Title, setEditedTitle] = useState(selectedTodo.Title);
   const [Description, setEditedDescription] = useState(
     selectedTodo.Description
@@ -23,17 +11,24 @@ const EditTodo = ({ rowData, selectedTodo, setIsEditing }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const todo = {
+    const updatedTodo = {
       id,
       Title,
       Description,
       dueDate,
     };
-    for (let i = 0; i < rowData.length; i++) {
-      if (rowData[i].id === selectedTodo.id) {
-        rowData[i] = todo;
+
+    const updatedData = JSON.parse(localStorage.getItem("dataList")).map(
+      (todo) => {
+        if (todo.id === selectedTodo.id) {
+          for (let i = 0; i < rowData.length; i++) {
+            return (rowData[i] = updatedTodo);
+          }
+        }
+        return todo;
       }
-    }
+    );
+    localStorage.setItem("dataList", JSON.stringify(updatedData));
     setIsEditing(false);
   };
 
@@ -44,7 +39,12 @@ const EditTodo = ({ rowData, selectedTodo, setIsEditing }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box
+          className="boxlayout"
+          sx={{
+            bgcolor: "background.default",
+          }}
+        >
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -53,6 +53,7 @@ const EditTodo = ({ rowData, selectedTodo, setIsEditing }) => {
                   label="Title"
                   variant="outlined"
                   fullWidth
+                  required
                   value={Title}
                   onChange={(e) => setEditedTitle(e.target.value)}
                 />
@@ -63,6 +64,7 @@ const EditTodo = ({ rowData, selectedTodo, setIsEditing }) => {
                   label="Description"
                   variant="outlined"
                   fullWidth
+                  required
                   value={Description}
                   onChange={(e) => setEditedDescription(e.target.value)}
                 />
@@ -82,9 +84,17 @@ const EditTodo = ({ rowData, selectedTodo, setIsEditing }) => {
               type="submit"
               variant="contained"
               color="primary"
-              style={{ marginTop: "1rem" }}
+              className="mt-3 me-3"
             >
               Submit
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              className="mt-3"
+              onClick={() => setIsEditing(false)}
+            >
+              Cancle
             </Button>
           </form>
         </Box>

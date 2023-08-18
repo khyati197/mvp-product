@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
-
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 const TodoList = ({ rowData, columns, handelEdit, handleDelete }) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [sortConfig, setSortConfig] = useState({
@@ -33,12 +33,6 @@ const TodoList = ({ rowData, columns, handelEdit, handleDelete }) => {
     return 0;
   });
 
-  const filteredRows = sortedRows.filter(
-    (row) =>
-      row.Title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      row.Description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   const handleSort = (key) => {
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
@@ -52,10 +46,16 @@ const TodoList = ({ rowData, columns, handelEdit, handleDelete }) => {
       const updatedSelectedRows = prevSelectedRows.includes(rowId)
         ? prevSelectedRows.filter((id) => id !== rowId)
         : [...prevSelectedRows, rowId];
+
       return updatedSelectedRows;
     });
   };
 
+  const filteredRows = sortedRows.filter(
+    (row) =>
+      row.Title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.Description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   return (
     <>
       <TextField
@@ -63,17 +63,15 @@ const TodoList = ({ rowData, columns, handelEdit, handleDelete }) => {
         variant="outlined"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        className="my-4 w-100 "
+        className="my-3 w-100 "
       />
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox />
-              </TableCell>
+              <TableCell></TableCell>
               {columns.map((column) => (
-                <TableCell   key={column.field}>
+                <TableCell key={column.field}>
                   <TableSortLabel
                     active={sortConfig.key === column.field}
                     direction={sortConfig.direction}
@@ -91,6 +89,7 @@ const TodoList = ({ rowData, columns, handelEdit, handleDelete }) => {
               <TableRow
                 key={row.Title}
                 className={selectedRows.includes(row.id) ? "selected-row" : ""}
+                draggable
               >
                 <TableCell padding="checkbox">
                   <Checkbox
@@ -100,7 +99,10 @@ const TodoList = ({ rowData, columns, handelEdit, handleDelete }) => {
                   />
                 </TableCell>
                 <TableCell>{row.Title}</TableCell>
-                <TableCell>{row.Description}</TableCell>
+                <TableCell>
+                  {row.Description.split(" ").slice(0, 10).join(" ")}
+                  {/* <span className="full-description">{row.Description}</span> */}
+                </TableCell>
                 <TableCell>{row.dueDate}</TableCell>
                 <TableCell className="d-flex">
                   <IconButton onClick={() => handleDelete(row.id)}>
@@ -109,6 +111,15 @@ const TodoList = ({ rowData, columns, handelEdit, handleDelete }) => {
                   <IconButton onClick={() => handelEdit(row.id)}>
                     <EditIcon />
                   </IconButton>
+                  {selectedRows.includes(row.id) ? (
+                    <IconButton>
+                      <CheckCircleIcon className="text-success" />
+                    </IconButton>
+                  ) : (
+                    <IconButton>
+                      <CheckCircleIcon className="invisible " />
+                    </IconButton>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

@@ -1,17 +1,6 @@
 import React, { useState } from "react";
 import { Button, Box, Modal, TextField, Grid } from "@mui/material";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-};
-
 const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
   const [formData, setFormData] = useState({
     id: rows.length + 1,
@@ -39,7 +28,13 @@ const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box
+          className="boxlayout"
+          sx={{
+            bgcolor: "background.default",
+          }}
+          open={true}
+        >
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -50,6 +45,7 @@ const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
                   fullWidth
                   value={formData.Title}
                   onChange={handleChange}
+                  required
                 />
               </Grid>
               <Grid item xs={12}>
@@ -60,6 +56,7 @@ const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
                   fullWidth
                   value={formData.Description}
                   onChange={handleChange}
+                  required
                 />
               </Grid>
               <Grid item xs={12}>
@@ -70,6 +67,7 @@ const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
                   fullWidth
                   value={formData.dueDate}
                   onChange={handleChange}
+                  required
                 />
               </Grid>
             </Grid>
@@ -77,9 +75,17 @@ const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
               type="submit"
               variant="contained"
               color="primary"
-              style={{ marginTop: "1rem" }}
+              className="mt-3 me-3"
             >
               Submit
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              className="mt-3"
+              onClick={() => setOpen(false)}
+            >
+              Cancle
             </Button>
           </form>
         </Box>

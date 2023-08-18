@@ -1,97 +1,24 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@import "./assets/scss/templetes/templetes.scss";
+.description-cell {
+    position: relative;
+    max-width: 250px; /* You can adjust this value */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+  
+  .full-description {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  to {
-    transform: rotate(360deg);
+  
+  .description-cell:hover .full-description {
+    display: block;
   }
-}
-.selected-row {
-  text-decoration: line-through;
-  background-color: rgba(25, 118, 210, 0.418);
-}
-
-.app {
-  text-align: center;
-  margin-top: 2rem;
-}
-
-.color-picker {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.color-option {
-  width: 30px;
-  height: 30px;
-  border: 2px solid #333;
-  margin: 0 5px;
-  cursor: pointer;
-}
-
-.color-option.selected {
-  border-width: 4px;
-}
-
-.add-note-btn {
-  padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.sticky-notes {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.sticky-note {
-  width: 150px;
-  height: 150px;
-  padding: 10px;
-  margin: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.delete-btn {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  cursor: pointer;
-  padding: 0.2rem 0.5rem;
-  margin-top: 0.5rem;
-}
