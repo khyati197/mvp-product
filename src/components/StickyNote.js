@@ -37,7 +37,7 @@ const StickyNote = ({ note, onDelete }) => {
 
   return (
     <Card
-      className="sticky-note p-3 my-2 me-2 border-1 d-inline-blobk position-relative h-100"
+      className="sticky-note p-3 mb-3 me-3 border-1 d-inline-blobk position-relative h-100"
       style={{ backgroundColor: color }}
     >
       <TextareaAutosize
@@ -55,8 +55,8 @@ const StickyNote = ({ note, onDelete }) => {
             id={`colorid-${note.id}`}
             type="color"
             value={color}
-            className="d-none"
             onChange={(e) => handleColorChange(e.target.value)}
+            className="custom-color-input"
           />
           <ColorLensOutlinedIcon />
         </label>

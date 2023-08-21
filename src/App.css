@@ -1,24 +1,2 @@
 @import "./assets/scss/templetes/templetes.scss";
-.description-cell {
-    position: relative;
-    max-width: 250px; /* You can adjust this value */
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  
-  .full-description {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: white;
-    padding: 10px;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .description-cell:hover .full-description {
-    display: block;
-  }
+

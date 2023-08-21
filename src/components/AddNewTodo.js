@@ -3,7 +3,7 @@ import { Button, Box, Modal, TextField, Grid } from "@mui/material";
 
 const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
   const [formData, setFormData] = useState({
-    id: rows.length + 1,
+    id: generateUniqueId(),
     Title: "",
     Description: "",
     dueDate: "",
@@ -85,7 +85,7 @@ const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
               className="mt-3"
               onClick={() => setOpen(false)}
             >
-              Cancle
+              Cancel
             </Button>
           </form>
         </Box>
@@ -95,3 +95,7 @@ const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
 };
 
 export default AddNewTodo;
+
+function generateUniqueId() {
+  return Math.random().toString(36).substr(2, 9);
+}

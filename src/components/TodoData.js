@@ -1,16 +1,19 @@
 import React, { useState } from "react";
-import { dataGroup } from "./mockData";
+import { dataGroup } from "./TodoMockData";
 import TodoList from "./TodoList";
 import AddTodoBtn from "./AddTodoBtn";
 import AddNewTodo from "./AddNewTodo";
 import EditTodo from "./EditTodo";
 import Swal from "sweetalert2";
-const MvpData = () => {
+
+const TodoData = () => {
   const tableData = localStorage.getItem("dataList");
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [rowData, setRowData] = useState(JSON.parse(tableData));
   const [selectedTodo, setSelectedTodo] = useState(null);
+
+  
   const handleEdit = (id) => {
     const [rowData] = JSON.parse(tableData).filter(
       (rowData) => rowData.id === id
@@ -19,6 +22,7 @@ const MvpData = () => {
     setIsEditing(true);
   };
 
+  //  TODO delete function with alert message
   const handleDelete = (id) => {
     Swal.fire({
       icon: "warning",
@@ -31,33 +35,34 @@ const MvpData = () => {
       if (result.value) {
         const updatedTodoData = rowData.filter((todo) => todo.id !== id);
         setRowData(updatedTodoData);
-        console.log(rowData, "data");
-
-        localStorage.setItem("dataList", JSON.stringify(updatedTodoData));
         Swal.fire({
           icon: "success",
           title: "Deleted!",
           text: `Reacord has been deleted.`,
           showConfirmButton: false,
-          timer: 1500,
+          timer: 1000,
         });
+        localStorage.setItem("dataList", JSON.stringify(updatedTodoData));
       }
     });
   };
 
   return (
     <>
+      {/* TODO add button  */}
       <AddTodoBtn open={setOpen} />
+      {/* TODO list table component */}
       <TodoList
         rowData={rowData}
         columns={dataGroup.colData}
         handelEdit={handleEdit}
         handleDelete={handleDelete}
       />
-      ;
+      ;{/* add new TODO component  */}
       {open && (
         <AddNewTodo rows={rowData} newTodoItem={setRowData} setOpen={setOpen} />
       )}
+      {/* edit TODO component  */}
       {isEditing && (
         <EditTodo
           rowData={rowData}
@@ -69,4 +74,4 @@ const MvpData = () => {
   );
 };
 
-export default MvpData;
+export default TodoData;

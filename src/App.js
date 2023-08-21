@@ -1,6 +1,6 @@
 import "./App.css";
 import * as React from "react";
-import MVP from "./components/MvpData";
+import TodoData from "./components/TodoData";
 import NotesData from "./components/NotesData";
 import { Box, IconButton } from "@mui/material";
 import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
@@ -64,7 +64,7 @@ const ToggleColorMode = () => {
         </IconButton>
         <div className="row mx-0">
           <div className="col-lg-6">
-            <MVP />
+            <TodoData />
           </div>
           <div className="col-lg-6">
             <NotesData />

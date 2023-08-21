@@ -1,23 +1,22 @@
 import React, { useState } from "react";
 import StickyNote from "./StickyNote";
 import { Container, Typography, IconButton } from "@mui/material";
-// import { notesDefData } from './NotesMockData'
 import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
 
 const NotesData = () => {
   const notesData = localStorage.getItem("notes");
-  const [notes, setNotes] = useState(JSON.parse(notesData));
+  const [notes, setNotes] = useState(JSON.parse(notesData) || []);
 
   const addNote = () => {
     const newNote = {
-      id: notes.length + 1,
+      id: generateUniqueId(), // Use a function to generate a unique id
       text: "",
       color: "#ffcc00",
     };
     const updatedNotes = [...notes, newNote];
     localStorage.setItem("notes", JSON.stringify(updatedNotes));
     setNotes(updatedNotes);
-    console.log(updatedNotes, "updatedNotes");
+    console.log(updatedNotes, "notes");
   };
 
   const deleteNote = (id) => {
@@ -46,3 +45,7 @@ const NotesData = () => {
 };
 
 export default NotesData;
+
+function generateUniqueId() {
+  return Math.random().toString(36).substr(2, 9);
+}

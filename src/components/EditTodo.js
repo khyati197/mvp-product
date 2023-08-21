@@ -17,18 +17,16 @@ const EditTodo = ({ rowData, selectedTodo, setIsEditing }) => {
       Description,
       dueDate,
     };
-
-    const updatedData = JSON.parse(localStorage.getItem("dataList")).map(
-      (todo) => {
-        if (todo.id === selectedTodo.id) {
-          for (let i = 0; i < rowData.length; i++) {
-            return (rowData[i] = updatedTodo);
-          }
-        }
-        return todo;
+    for (let i = 0; i < rowData.length; i++) {
+      if (rowData[i].id === selectedTodo.id) {
+        rowData[i] = updatedTodo;
       }
+    }
+    const updatedData = JSON.parse(localStorage.getItem("dataList")).map(
+      (todo) => (todo.id === selectedTodo.id ? updatedTodo : todo)
     );
     localStorage.setItem("dataList", JSON.stringify(updatedData));
+
     setIsEditing(false);
   };
 
@@ -94,7 +92,7 @@ const EditTodo = ({ rowData, selectedTodo, setIsEditing }) => {
               className="mt-3"
               onClick={() => setIsEditing(false)}
             >
-              Cancle
+              Cancel
             </Button>
           </form>
         </Box>
