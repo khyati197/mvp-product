@@ -15,26 +15,17 @@ import {
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-const TodoList = ({ rowData, columns, handelEdit, handleDelete }) => {
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [rows, setRows] = useState(rowData);
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import Swal from "sweetalert2";
 
+const TodoList = ({ rowData, columns, handelEdit }) => {
+  const [sortedRows, setSortedRows] = useState([...rowData]);
+  const [selectedRows, setSelectedRows] = useState([]);
   const [sortConfig, setSortConfig] = useState({
     key: "",
     direction: "asc",
   });
-
-  const [searchQuery, setSearchQuery] = useState(""); // Step 1
-
-  const sortedRows = [...rows].sort((a, b) => {
-    if (a[sortConfig.key] < b[sortConfig.key]) {
-      return sortConfig.direction === "asc" ? -1 : 1;
-    }
-    if (a[sortConfig.key] > b[sortConfig.key]) {
-      return sortConfig.direction === "asc" ? 1 : -1;
-    }
-    return 0;
-  });
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSort = (key) => {
     let direction = "asc";
@@ -42,6 +33,16 @@ const TodoList = ({ rowData, columns, handelEdit, handleDelete }) => {
       direction = "desc";
     }
     setSortConfig({ key, direction });
+    const sorted = [...sortedRows].sort((a, b) => {
+      if (a[key] < b[key]) {
+        return direction === "asc" ? -1 : 1;
+      }
+      if (a[key] > b[key]) {
+        return direction === "asc" ? 1 : -1;
+      }
+      return 0;
+    });
+    setSortedRows(sorted);
   };
 
   const handleCheckboxChange = (rowId) => {
@@ -49,38 +50,55 @@ const TodoList = ({ rowData, columns, handelEdit, handleDelete }) => {
       const updatedSelectedRows = prevSelectedRows.includes(rowId)
         ? prevSelectedRows.filter((id) => id !== rowId)
         : [...prevSelectedRows, rowId];
-
       return updatedSelectedRows;
     });
   };
 
-  const filteredRows = sortedRows.filter(
-    (row) =>
-      row.Title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      row.Description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const handleDragStart = (e, index) => {
-    e.dataTransfer.setData("text/plain", index);
+  const handleDragStart = (e, rowId) => {
+    e.dataTransfer.setData("rowId", rowId);
   };
 
   const handleDragOver = (e) => {
     e.preventDefault();
   };
-  const handleDrop = (e, targetIndex) => {
-    e.preventDefault();
-    const sourceIndex = e.dataTransfer.getData("text/plain");
-    const draggedRow = filteredRows[sourceIndex];
 
-    if (+sourceIndex !== targetIndex) {
-      const updatedRows = filteredRows.filter(
-        (_, index) => index !== +sourceIndex
-      );
-      updatedRows.splice(targetIndex, 0, draggedRow);
+  const handleDrop = (e, targetRowId) => {
+    const sourceRowId = e.dataTransfer.getData("rowId");
+    const sourceIndex = sortedRows.findIndex((row) => row.id === sourceRowId);
+    const targetIndex = sortedRows.findIndex((row) => row.id === targetRowId);
 
-      setRows(updatedRows); // Update the rows state with the new order
-    }
+    const updatedSortedRows = [...sortedRows];
+    const [movedRow] = updatedSortedRows.splice(sourceIndex, 1);
+    updatedSortedRows.splice(targetIndex, 0, movedRow);
+
+    setSortedRows(updatedSortedRows);
   };
+
+  //  TODO delete function with alert message
+  const handleDelete = (id) => {
+    Swal.fire({
+      icon: "warning",
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel!",
+    }).then((result) => {
+      if (result.value) {
+        const updatedTodoData = sortedRows.filter((todo) => todo.id !== id);
+        setSortedRows(updatedTodoData);
+        Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          text: `Reacord has been deleted.`,
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        localStorage.setItem("dataList", JSON.stringify(updatedTodoData));
+      }
+    });
+  };
+
   return (
     <>
       <TextField
@@ -94,6 +112,7 @@ const TodoList = ({ rowData, columns, handelEdit, handleDelete }) => {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell></TableCell>
               <TableCell></TableCell>
               {columns.map((column) => (
                 <TableCell key={column.field}>
@@ -118,17 +137,25 @@ const TodoList = ({ rowData, columns, handelEdit, handleDelete }) => {
                     searchQuery.toLowerCase()
                   )
               )
-              .map((row, index) => (
+              .map((row) => (
                 <TableRow
                   key={row.id}
                   className={
                     selectedRows.includes(row.id) ? "selected-row" : ""
                   }
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, index)}
-                  onDragOver={(e) => handleDragOver(e)}
-                  onDrop={(e) => handleDrop(e, index)}
                 >
+                  <TableCell
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, row.id)}
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(e, row.id)}
+                  >
+                    <DragIndicatorIcon
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="Tooltip on bottom"
+                    />
+                  </TableCell>
                   <TableCell padding="checkbox">
                     <Checkbox
                       color="primary"
@@ -137,27 +164,26 @@ const TodoList = ({ rowData, columns, handelEdit, handleDelete }) => {
                     />
                   </TableCell>
                   <TableCell>{row.Title}</TableCell>
-                  <TableCell>
-                    {row.Description.split(" ").slice(0, 10).join(" ")}
-                    {/* <span className="full-description">{row.Description}</span> */}
-                  </TableCell>
+                  <TableCell>{row.Description.slice(0, 15) + ".."}</TableCell>
                   <TableCell>{row.dueDate}</TableCell>
-                  <TableCell className="d-flex">
-                    <IconButton onClick={() => handleDelete(row.id)}>
-                      <DeleteOutlineIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handelEdit(row.id)}>
-                      <EditIcon />
-                    </IconButton>
-                    {selectedRows.includes(row.id) ? (
-                      <IconButton>
-                        <CheckCircleIcon className="text-success" />
+                  <TableCell>
+                    <div className="d-flex">
+                      <IconButton onClick={() => handleDelete(row.id)}>
+                        <DeleteOutlineIcon />
                       </IconButton>
-                    ) : (
-                      <IconButton>
-                        <CheckCircleIcon className="invisible " />
+                      <IconButton onClick={() => handelEdit(row.id)}>
+                        <EditIcon />
                       </IconButton>
-                    )}
+                      {selectedRows.includes(row.id) ? (
+                        <IconButton>
+                          <CheckCircleIcon className="text-success" />
+                        </IconButton>
+                      ) : (
+                        <IconButton>
+                          <CheckCircleIcon className="invisible " />
+                        </IconButton>
+                      )}
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}

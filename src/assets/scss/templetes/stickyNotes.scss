@@ -1,6 +1,7 @@
 .sticky-note {
   background-color: #ffd700;
   border: 1px solid #ccc;
+  width: 200px;
   @media screen and (max-width: 567px) {
     width: 100%;
   }

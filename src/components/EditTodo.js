@@ -28,6 +28,7 @@ const EditTodo = ({ rowData, selectedTodo, setIsEditing }) => {
     localStorage.setItem("dataList", JSON.stringify(updatedData));
 
     setIsEditing(false);
+    window.location.reload();
   };
 
   return (

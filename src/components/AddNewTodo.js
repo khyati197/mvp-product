@@ -19,6 +19,7 @@ const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
     setOpen(false);
     newTodoItem(rows);
     localStorage.setItem("dataList", JSON.stringify(rows));
+    window.location.reload(false);
   };
 
   return (
@@ -96,6 +97,7 @@ const AddNewTodo = ({ rows, newTodoItem, setOpen }) => {
 
 export default AddNewTodo;
 
+// Use a function to generate a unique id
 function generateUniqueId() {
   return Math.random().toString(36).substr(2, 9);
 }

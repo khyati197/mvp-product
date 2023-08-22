@@ -9,14 +9,13 @@ const NotesData = () => {
 
   const addNote = () => {
     const newNote = {
-      id: generateUniqueId(), // Use a function to generate a unique id
+      id: generateUniqueId(),
       text: "",
       color: "#ffcc00",
     };
     const updatedNotes = [...notes, newNote];
     localStorage.setItem("notes", JSON.stringify(updatedNotes));
     setNotes(updatedNotes);
-    console.log(updatedNotes, "notes");
   };
 
   const deleteNote = (id) => {
@@ -46,6 +45,7 @@ const NotesData = () => {
 
 export default NotesData;
 
+// Use a function to generate a unique id
 function generateUniqueId() {
   return Math.random().toString(36).substr(2, 9);
 }

@@ -2,7 +2,7 @@ import "./App.css";
 import * as React from "react";
 import TodoData from "./components/TodoData";
 import NotesData from "./components/NotesData";
-import { Box, IconButton } from "@mui/material";
+import { Paper, IconButton } from "@mui/material";
 import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
@@ -43,7 +43,7 @@ const ToggleColorMode = () => {
   const colorMode = React.useContext(ColorModeContext);
   return (
     <>
-      <Box
+      <Paper
         sx={{
           width: "100%",
           minHeight: "100vh",
@@ -70,7 +70,7 @@ const ToggleColorMode = () => {
             <NotesData />
           </div>
         </div>
-      </Box>
+      </Paper>
     </>
   );
 };
