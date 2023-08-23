@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import StickyNote from "./StickyNote";
 import { Container, Typography, IconButton } from "@mui/material";
 import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
-
+import { notesDefData } from "./NotesMockData";
 const NotesData = () => {
   const notesData = localStorage.getItem("notes");
-  const [notes, setNotes] = useState(JSON.parse(notesData) || []);
-
+  const [notes, setNotes] = useState(JSON.parse(notesData) || notesDefData);
   const addNote = () => {
     const newNote = {
       id: generateUniqueId(),

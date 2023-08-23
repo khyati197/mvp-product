@@ -9,9 +9,10 @@ const TodoData = () => {
   const tableData = localStorage.getItem("dataList");
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [rowData, setRowData] = useState(JSON.parse(tableData));
+  const [rowData, setRowData] = useState(
+    JSON.parse(tableData) || dataGroup.rowData
+  );
   const [selectedTodo, setSelectedTodo] = useState(null);
-
 
   const handleEdit = (id) => {
     const [rowData] = JSON.parse(tableData).filter(
@@ -20,7 +21,7 @@ const TodoData = () => {
     setSelectedTodo(rowData);
     setIsEditing(true);
   };
-
+console.log(rowData , 'rowData')
   return (
     <>
       {/* TODO add button  */}
