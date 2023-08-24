@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Card, TextareaAutosize } from "@mui/material";
+import { Card, TextareaAutosize, Tooltip } from "@mui/material";
 import ColorLensOutlinedIcon from "@mui/icons-material/ColorLensOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+
 const StickyNote = ({ note, onDelete }) => {
   const [text, setText] = useState(note.text);
   const [color, setColor] = useState(note.color);
@@ -35,6 +36,17 @@ const StickyNote = ({ note, onDelete }) => {
     updateLocalStorageText(newText);
   };
 
+  // Calculate the luminance of the background color
+  const getColor = (hexColor) => {
+    const rgb = parseInt(hexColor.slice(1), 16);
+    const r = (rgb >> 16) & 0xff;
+    const g = (rgb >> 8) & 0xff;
+    const b = (rgb >> 0) & 0xff;
+    return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  };
+
+  const isDarkColor = getColor(color) < 0.5;
+
   return (
     <Card
       className="sticky-note p-3 mb-3 me-3 border-1 d-inline-blobk position-relative h-100"
@@ -47,6 +59,7 @@ const StickyNote = ({ note, onDelete }) => {
         onChange={(e) => handleTextChange(e.target.value)}
         autoFocus
         className="notestextarea w-100 border-0 bg-transparent"
+        style={{ color: isDarkColor ? "white" : "black" }}
       />
 
       <div className="text-end">
@@ -58,9 +71,18 @@ const StickyNote = ({ note, onDelete }) => {
             onChange={(e) => handleColorChange(e.target.value)}
             className="custom-color-input"
           />
-          <ColorLensOutlinedIcon />
+          <Tooltip title="Color">
+            <ColorLensOutlinedIcon
+              style={{ color: isDarkColor ? "white" : "black" }}
+            />
+          </Tooltip>
         </label>
-        <DeleteOutlineIcon onClick={handleDelete} />
+        <Tooltip title="Delete">
+          <DeleteOutlineIcon
+            onClick={handleDelete}
+            style={{ color: isDarkColor ? "white" : "black" }}
+          />
+        </Tooltip>
       </div>
     </Card>
   );

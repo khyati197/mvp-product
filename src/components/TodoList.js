@@ -11,6 +11,7 @@ import {
   TableSortLabel,
   Checkbox,
   TextField,
+  Tooltip
 } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
@@ -150,11 +151,9 @@ const TodoList = ({ rowData, columns, handelEdit }) => {
                     onDragOver={handleDragOver}
                     onDrop={(e) => handleDrop(e, row.id)}
                   >
-                    <DragIndicatorIcon
-                      data-toggle="tooltip"
-                      data-placement="bottom"
-                      title="Tooltip on bottom"
-                    />
+                    <Tooltip title="Drag me">
+                      <DragIndicatorIcon />
+                    </Tooltip>
                   </TableCell>
                   <TableCell padding="checkbox">
                     <Checkbox
@@ -168,12 +167,16 @@ const TodoList = ({ rowData, columns, handelEdit }) => {
                   <TableCell>{row.dueDate}</TableCell>
                   <TableCell>
                     <div className="d-flex">
-                      <IconButton onClick={() => handleDelete(row.id)}>
-                        <DeleteOutlineIcon />
-                      </IconButton>
-                      <IconButton onClick={() => handelEdit(row.id)}>
-                        <EditIcon />
-                      </IconButton>
+                      <Tooltip title="Delete">
+                        <IconButton onClick={() => handleDelete(row.id)}>
+                          <DeleteOutlineIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Edit">
+                        <IconButton onClick={() => handelEdit(row.id)}>
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
                       {selectedRows.includes(row.id) ? (
                         <IconButton>
                           <CheckCircleIcon className="text-success" />

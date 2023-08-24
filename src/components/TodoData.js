@@ -21,7 +21,6 @@ const TodoData = () => {
     setSelectedTodo(rowData);
     setIsEditing(true);
   };
-console.log(rowData , 'rowData')
   return (
     <>
       {/* TODO add button  */}

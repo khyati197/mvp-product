@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import StickyNote from "./StickyNote";
-import { Container, Typography, IconButton } from "@mui/material";
+import { Container, Typography, IconButton, Tooltip } from "@mui/material";
 import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
 import { notesDefData } from "./NotesMockData";
 const NotesData = () => {
@@ -29,9 +29,11 @@ const NotesData = () => {
         <Typography variant="h5" component="h5" color="primary">
           NOTES
         </Typography>
-        <IconButton onClick={addNote}>
-          <AddCircleSharpIcon sx={{ fontSize: "40px" }} color="primary" />
-        </IconButton>
+        <Tooltip title="Add Notes">
+          <IconButton onClick={addNote}>
+            <AddCircleSharpIcon sx={{ fontSize: "40px" }} color="primary" />
+          </IconButton>
+        </Tooltip>
       </div>
       <div className="d-flex flex-wrap">
         {notes.map((note) => (
