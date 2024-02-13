@@ -71,4 +71,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ## `Project Detail`
 
-This project is designed to manage daily tasks and responsibilities through a todo list, offering a convenient solution for both work and personal life. Additionally, it provides the functionality to create sticky notes for important information such as credentials.
+This project is designed to manage daily tasks and responsibilities through a todo list using React Material in React, offering a convenient solution for both work and personal life. Additionally, it provides functionality to create sticky notes for important information, such as credentials.
